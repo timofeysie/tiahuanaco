@@ -26,6 +26,47 @@ One answer on SO says: *It wasn't working because I had a set of credentials con
 
 We have no .aws directory.
 
+Another SO answer: *I created an IAM policy to allow all actions of AWS CloudFormation and attached that policy to the user, and the problem was resolved.*
+
+And another: *The session tokens given out by aws-vault are not usable for some actions like creating roles. Instead, aws-vault exec -n profile ... should be used to use the root profile (not session).*
+
+Or this: *you must not have permission to read IAM, even your own.*
+
+When running the app locally, there error is different.
+```
+serverless invoke local --function create --path mocks/create-event.json
+Serverless: Bundling with Webpack...
+Time: 34928ms
+...
+=============== { AccessDeniedException: User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:100641718971:table/notes
+    at Request.extractError (/Users/tim/node/aws/notes-app-api/node_modules/aws-sdk/lib/protocol/json.js:51:27)
+    ...
+  message:
+   'User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:100641718971:table/notes',
+  code: 'AccessDeniedException',
+  time: 2019-06-24T12:43:53.489Z,
+  requestId: 'BVS7IB1GLPIN2AAQD7BHF04B93VV4KQNSO5AEMVJF66Q9ASUAAJG',
+  statusCode: 400,
+  retryable: false,
+  retryDelay: 14.086041229294445 }
+{
+    "statusCode": 500,
+    "headers": {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Credentials": true
+    },
+    "body": "{\"status\":false}"
+}
+```
+
+Searching for that error turned up [this answer](https://stackoverflow.com/questions/34784804/aws-dynamodb-issue-user-is-not-authorized-to-perform-dynamodbputitem-on-resou) which says: *Check the IAM/Role policies that you are using. A quick check is to add AmazonDynamoDBFullAccess policy in your role by going to "Permissions" tab in AWS console. If it works after that then it means you need to create a right access policy and attach it to your role.*
+
+The error after adding the AmazonDynamoDBFullAccess role as discussed above changes the error to:
+```
+ValidationException: One or more parameter values were invalid: Missing the key nonteIdSortKey in the item
+```
+
+
 
 # Serverless Node.js Starter
 
