@@ -1,3 +1,32 @@
+# Tiahuanaco
+
+
+Running
+```
+serverless invoke local --function create --path mocks/create-event.json
+```
+
+The response should be statusCode: 200, but it's 500.
+
+Console log says:
+```
+[uuid] external "uuid" 42 bytes {create} [built]
+{ UnrecognizedClientException: The security token included in the request is invalid.
+    at Request.extractError (/Users/tim/node/aws/notes-app-api/node_modules/aws-sdk/lib/protocol/json.js:51:27)
+```
+
+The SO approved approach [here](https://stackoverflow.com/questions/34582318/how-can-i-resolve-the-error-the-security-token-included-in-the-request-is-inval) when followed runs into this issue: *As a best practice, we recommend creating an IAM user that has access keys rather than relying on root access keys.*
+
+I think we have our test user.  But when doing a serverless deploy, we get still get this error:
+```
+The security token included in the request is invalid
+```
+
+One answer on SO says: *It wasn't working because I had a set of credentials configured in ~/.aws and for whatever reason it started interfering with CodeDeploy, even if this configuration has been in place for over 2 years and it worked just fine.*
+
+We have no .aws directory.
+
+
 # Serverless Node.js Starter
 
 A Serverless starter that adds ES7 syntax, serverless-offline, environment variables, and unit test support. Part of the [Serverless Stack](http://serverless-stack.com) guide.

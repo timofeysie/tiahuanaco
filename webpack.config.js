@@ -11,7 +11,7 @@ module.exports = {
   externals: [nodeExternals()],
   mode: slsw.lib.webpack.isLocal ? "development" : "production",
   optimization: {
-    // We do not want to minimize our code.
+    // We no not want to minimize our code.
     minimize: false
   },
   performance: {
@@ -30,4 +30,3 @@ module.exports = {
     ]
   }
 };
-
