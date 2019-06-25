@@ -34,29 +34,7 @@ Or this: *you must not have permission to read IAM, even your own.*
 
 When running the app locally, there error is different.
 ```
-serverless invoke local --function create --path mocks/create-event.json
-Serverless: Bundling with Webpack...
-Time: 34928ms
-...
-=============== { AccessDeniedException: User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:100641718971:table/notes
-    at Request.extractError (/Users/tim/node/aws/notes-app-api/node_modules/aws-sdk/lib/protocol/json.js:51:27)
-    ...
-  message:
-   'User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:100641718971:table/notes',
-  code: 'AccessDeniedException',
-  time: 2019-06-24T12:43:53.489Z,
-  requestId: 'BVS7IB1GLPIN2AAQD7BHF04B93VV4KQNSO5AEMVJF66Q9ASUAAJG',
-  statusCode: 400,
-  retryable: false,
-  retryDelay: 14.086041229294445 }
-{
-    "statusCode": 500,
-    "headers": {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Credentials": true
-    },
-    "body": "{\"status\":false}"
-}
+{ AccessDeniedException: User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: dynamodb:PutItem on resource: arn:aws:dynamodb:us-east-1:100641718971:table/notes
 ```
 
 Searching for that error turned up [this answer](https://stackoverflow.com/questions/34784804/aws-dynamodb-issue-user-is-not-authorized-to-perform-dynamodbputitem-on-resou) which says: *Check the IAM/Role policies that you are using. A quick check is to add AmazonDynamoDBFullAccess policy in your role by going to "Permissions" tab in AWS console. If it works after that then it means you need to create a right access policy and attach it to your role.*
@@ -64,6 +42,48 @@ Searching for that error turned up [this answer](https://stackoverflow.com/quest
 The error after adding the AmazonDynamoDBFullAccess role as discussed above changes the error to:
 ```
 ValidationException: One or more parameter values were invalid: Missing the key nonteIdSortKey in the item
+```
+
+According to this Atom editor's global search with ctl-F, there is nononteIdSortKey string in this project.  So it's a DynamoDB thing?
+
+SO answers indicate it is a naming difference such as between Id and ID.  We should check the table and field names?
+
+Here is the function in create.js:
+```
+export async function main(event, context) {
+  const data = JSON.parse(event.body);
+  const params = {
+    TableName: "notes",
+    Item: {
+      userId: event.requestContext.identity.cognitoIdentityId,
+      noteId: uuid.v1(),
+      content: data.content,
+      attachment: data.attachment,
+      createdAt: Date.now()
+  }};
+  try {
+    await dynamoDbLib.call("put", params);
+    return success(params.Item);
+  } catch (e) { ... }
+}
+```
+
+We are looking for a typo.
+nonteIdSortKey should be noteIdSortKey?  Or nonoteIdSortKey?  The error itself looks like a type, such that it should say "no noteIdeSortKey".  Anyhow, time to check the DynamoDB dashboard and find out where we mixed up the letters for note.
+
+Yep, nonteIdSortKey is used as the primary sort key.  That's unfortunate.
+
+As the simplest path forward, can change noteId to the misspelled one and see it it works.
+
+Next, when trying to post the form, we are getting a 400 network error:
+```
+x-amzn-errormessage: 1 validation error detected: Value 'admin@example.com' at 'identityPoolId' failed to satisfy constraint: Member must satisfy regular expression pattern: [\w-]+:[0-9a-f-]+
+```
+In the request payload:
+```
+IdentityPoolId: "admin@example.com"
+Logins: {,…}
+cognito-idp.us-east-1.amazonaws.com/us-east-1_y3LHvvlPG: "eyJ ... 0g"
 ```
 
 
