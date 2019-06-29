@@ -86,6 +86,66 @@ Logins: {,…}
 cognito-idp.us-east-1.amazonaws.com/us-east-1_y3LHvvlPG: "eyJ ... 0g"
 ```
 
+SO: *remove 'arn:aws:kinesis:us-west-2:xxxxxxxxxx:stream/rds-temp-leads-stream' this from stream name. Just put the name of stream there like "rds-temp-leads-stream"*
+
+The preamble, *arn:aws:* was in our first error message above....
+
+Another SO: *I was using user pool id instead of identity pool id.*
+
+[Here](https://serverless-stack.com/chapters/create-a-cognito-user-pool.html) we created a Cognito User Pool.  We can see in our dashboard:
+```
+Pool Id us-east-1_y3LHvvlPG
+Pool ARN arn:aws:cognito-idp:us-east-1:100641718971:userpool/...
+```
+
+So actually I think this is a front end issue now.  Or an AWS configuration issue.  Front end, back end, whos responsibity is it?  Since there is only one developer on this project right now, it's just a matter of where to create notes about the project?  Jumping back and forth between client and server project readme files is not working out very well in this case.
+
+Going back to [where the create note API was created](https://serverless-stack.com/chapters/add-a-create-note-api.html), there is a mock that can be run to test it.
+```
+{
+  "body": "{\"content\":\"hello world\",\"attachment\":\"hello.jpg\"}",
+  "requestContext": {
+    "identity": {
+      "cognitoIdentityId": "USER-SUB-1234"
+    }
+  }
+}
+```
+
+About this is says *the cognitoIdentityId field is just a string we are going to use as our userId.  We can use any string here; just make sure to use the same one when we test our other functions.*.  That's interesting as when we run the test command we get an error about the userId:
+```
+$ serverless invoke local --function create --path mocks/create-event.json
+[uuid] external "uuid" 42 bytes {create} [built]
+=============== { ValidationException: One or more parameter values were invalid: Missing the key noteId in the item
+```
+
+The response is *supposed* to look something like this:
+```
+{ statusCode: 200,
+  headers: {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Credentials': true
+  },
+  body: '{"userId":"USER-SUB-1234","noteId":"578eb840-f70f-11e6-9d1a-1359b3b22944","content":"hello world","attachment":"hello.jpg","createdAt":1487800950620}'
+}
+```
+
+
+Regarding the noteId, in the Acapana project readme file we find this: *I changed noteId to the misspelled one and now that part works, but there is a new error.*
+
+The first error there was:
+*ValidationException: One or more parameter values were invalid: Missing the key nonteIdSortKey in the item*
+
+The problem there was that nonteIdSortKey was set as the primary key in the AWS dashbaord.  We would have to create a new table to correct that, so that's why we changed the app not the table.
+
+So, instead of doing the wise thing and dropping the table and creating a new one, I tried this foolishness to see if it would work:
+```
+noteId: id,
+nonteIdSortKey: id,
+```
+
+
+Hahahah.  Yes, and it works.
 
 
 # Serverless Node.js Starter

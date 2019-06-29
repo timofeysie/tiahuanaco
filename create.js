@@ -4,11 +4,14 @@ import { success, failure } from "./libs/response-lib";
 
 export async function main(event, context) {
   const data = JSON.parse(event.body);
+  const id = uuid.v1();
+  console.log('----------------- ',id);
   const params = {
     TableName: "notes",
     Item: {
       userId: event.requestContext.identity.cognitoIdentityId,
-      nonteIdSortKey: uuid.v1(),
+      noteId: id,
+      nonteIdSortKey: id,
       content: data.content,
       attachment: data.attachment,
       createdAt: Date.now()
