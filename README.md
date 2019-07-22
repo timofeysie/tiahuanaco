@@ -1,12 +1,28 @@
 # Tiahuanaco
 
+This project is a Serverless backend to manage content uploaded to AWS.  The front end is [Acapana](https://github.com/timofeysie/acapana).
 
-Running
+#
+## Table of cotents
+
+* [Workflow](#workflow)
+* [Starting out](#starting-out)
+* [Serverlss Node.js Starter Docs](#serverless-Node.js-Starter-docs)
+
+
+## Workflow
+
+Running locally:
 ```
 serverless invoke local --function create --path mocks/create-event.json
 ```
 
-The response should be statusCode: 200, but it's 500.
+The response should be statusCode: 200.
+
+
+## Starting out
+
+The response to running locally should be statusCode: 200, but it's 500.
 
 Console log says:
 ```
@@ -145,10 +161,77 @@ nonteIdSortKey: id,
 ```
 
 
-Hahahah.  Yes, and it works.
+Hahahah.  Yes, and it works.  Well, at least the test passes.  Adding a new note from the React app returns:
+```
+Request URL: https://cognito-identity.us-east-1.amazonaws.com/
+Request Method: POST
+Status Code: 400
+```
+
+The response:
+```
+{"__type":"ValidationException","message":"2 validation errors detected: Value 'arn:aws:cognito-idp:us-east-1:100641718971:userpool/us-east-1_y3LHvvlPG' at 'identityPoolId' failed to satisfy constraint: Member must satisfy regular expression pattern: [\\w-]+:[0-9a-f-]+; Value 'arn:aws:cognito-idp:us-east-1:100641718971:userpool/us-east-1_y3LHvvlPG' at 'identityPoolId' failed to satisfy constraint: Member must have length less than or equal to 55"}
+```
+
+Who's good at regexes?  
+```
+[\\w-]+:[0-9a-f-]+
+```
+
+That looks like matching \w- and numbers and letters.  Doesn't really help.  For whatever reasons, what we have for the identityPoolId is wrong.
+
+Not sure if we ever created an identity pool.  The confusion between that and a user pool.
+
+This is what the article linked to above says:
+*The userId is a Federated Identity id that comes in as a part of the request. This is set after our user has been authenticated via the User Pool. We are going to expand more on this in the coming chapters when we set up our Cognito Identity Pool. However, if you want to use the user’s User Pool user Id; take a look at the Mapping Cognito Identity Id and User Pool Id chapter.*
 
 
-# Serverless Node.js Starter
+YOUR_S3_UPLOADS_BUCKET_NAME
+YOUR_API_GATEWAY_REGION
+YOUR_API_GATEWAY_ID from the deploying the API chapter.
+
+Identity pool ID  us-west-2:f49f44c0-cd15-4c37-9023-414a2c80962b
+Identity Pool ARN
+arn:aws:cognito-identity:us-west-2:100641718971:identitypool/us-west-2:f49f44c0-cd15-4c37-9023-414a2c80962b
+
+But with these credentials, we get the following error:
+```
+{"__type":"ResourceNotFoundException","message":"IdentityPool 'us-west-2:f49f44c
+```
+
+You can see the id there.  And it's wrong.  How to find it, SO?
+```
+aws cognito-identity list-identity-pools --max-results 10
+```
+
+But that returns an error:
+```
+An error occurred (AccessDeniedException) when calling the ListIdentityPools operation: User: arn:aws:iam::100641718971:user/serverless-agent is not authorized to perform: cognito-identity:ListIdentityPools on resource: arn:aws:cognito-identity:us-east-1:100641718971:identitypool/
+```
+
+Creating a new pool and use that id:
+```
+{"__type":"ResourceNotFoundException","message":"IdentityPool 'us-west-2:f49f44c0-cd15-4c37-9023-414a2c80962b' not found."}
+```
+
+Similar to last time.  Why is it us-west-2?  Fix that at now this:
+```
+{"__type":"InvalidIdentityPoolConfigurationException","message":"Invalid identity pool configuration. Check assigned IAM roles for this pool."}
+```
+
+*create a federated Cognito Identity Pool. We will be using our User Pool as the identity provider. We could also use Facebook, Google, or our own custom identity provider. Once a user is authenticated via our User Pool, the Identity Pool will attach an IAM Role to the user. We will define a policy for this IAM Role to grant access to the S3 bucket and our API. This is the Amazon way of securing your resources.*
+
+Here is the important part of the policy created with the names to the info that needs to be filled is:
+```
+      "Resource": [
+        "arn:aws:s3:::YOUR_S3_UPLOADS_BUCKET_NAME/private/${cognito-identity.amazonaws.com:sub}/*"
+      "Resource": [
+        "arn:aws:execute-api:YOUR_API_GATEWAY_REGION:*:YOUR_API_GATEWAY_ID/*/*/*"
+```
+
+
+
+# Serverless Node.js Starter Docs
 
 A Serverless starter that adds ES7 syntax, serverless-offline, environment variables, and unit test support. Part of the [Serverless Stack](http://serverless-stack.com) guide.
 
