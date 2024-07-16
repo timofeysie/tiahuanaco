@@ -1,0 +1,595 @@
+{
+ "Resources": {
+  "tiahuanacoLambdaServiceRole31540BFC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoLambda/ServiceRole/Resource"
+   }
+  },
+  "tiahuanacoLambda66943F8B": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "1a14af78292bedebb4924295c87c7be8110d946410df5793e66f43ad366dbbc7.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "tiahuanacoLambdaServiceRole31540BFC",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "tiahuanacoLambdaServiceRole31540BFC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoLambda/Resource",
+    "aws:asset:path": "asset.1a14af78292bedebb4924295c87c7be8110d946410df5793e66f43ad366dbbc7",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "tiahuanacoApi4D12496E": {
+   "Type": "AWS::ApiGateway::RestApi",
+   "Properties": {
+    "Name": "tiahuanacoApi"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Resource"
+   }
+  },
+  "tiahuanacoApiDeploymentD25110BC7bf2e7da483c70355fa200fb65145481": {
+   "Type": "AWS::ApiGateway::Deployment",
+   "Properties": {
+    "Description": "Automatically created by the RestApi construct",
+    "RestApiId": {
+     "Ref": "tiahuanacoApi4D12496E"
+    }
+   },
+   "DependsOn": [
+    "tiahuanacoApidiceGET7DB1B14F",
+    "tiahuanacoApidice5B1FA5C0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Deployment/Resource"
+   }
+  },
+  "tiahuanacoApiDeploymentStageprod66080EAB": {
+   "Type": "AWS::ApiGateway::Stage",
+   "Properties": {
+    "DeploymentId": {
+     "Ref": "tiahuanacoApiDeploymentD25110BC7bf2e7da483c70355fa200fb65145481"
+    },
+    "RestApiId": {
+     "Ref": "tiahuanacoApi4D12496E"
+    },
+    "StageName": "prod"
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/DeploymentStage.prod/Resource"
+   }
+  },
+  "tiahuanacoApidice5B1FA5C0": {
+   "Type": "AWS::ApiGateway::Resource",
+   "Properties": {
+    "ParentId": {
+     "Fn::GetAtt": [
+      "tiahuanacoApi4D12496E",
+      "RootResourceId"
+     ]
+    },
+    "PathPart": "dice",
+    "RestApiId": {
+     "Ref": "tiahuanacoApi4D12496E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/dice/Resource"
+   }
+  },
+  "tiahuanacoApidiceGETApiPermissionTiahuanacoStacktiahuanacoApiA28BF0F5GETdiceDE9D1913": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "rollADiceFunction95DE4F0F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "tiahuanacoApi4D12496E"
+       },
+       "/",
+       {
+        "Ref": "tiahuanacoApiDeploymentStageprod66080EAB"
+       },
+       "/GET/dice"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/dice/GET/ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..dice"
+   }
+  },
+  "tiahuanacoApidiceGETApiPermissionTestTiahuanacoStacktiahuanacoApiA28BF0F5GETdiceA9500120": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "rollADiceFunction95DE4F0F",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "tiahuanacoApi4D12496E"
+       },
+       "/test-invoke-stage/GET/dice"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/dice/GET/ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..dice"
+   }
+  },
+  "tiahuanacoApidiceGET7DB1B14F": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "rollADiceFunction95DE4F0F",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "tiahuanacoApidice5B1FA5C0"
+    },
+    "RestApiId": {
+     "Ref": "tiahuanacoApi4D12496E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/dice/GET/Resource"
+   }
+  },
+  "rollADiceFunctionServiceRole548812C1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/rollADiceFunction/ServiceRole/Resource"
+   }
+  },
+  "rollADiceFunction95DE4F0F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "074d4968b562153f4d3d3938ddc3efef05ee96bff35f8de4ad11fda59c5080a0.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "rollADiceFunctionServiceRole548812C1",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "rollADiceFunctionServiceRole548812C1"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/rollADiceFunction/Resource",
+    "aws:asset:path": "asset.074d4968b562153f4d3d3938ddc3efef05ee96bff35f8de4ad11fda59c5080a0",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/1WQy26DQAxFvyX7iRuSbrpMqLLrQ+QDkAOGmscMwp6iCPHv1Qzpa3WvLfv4yntIHp9gt8FJtkXZbju+wnxRLFqDk+Rzh/21xNy6khqB1yhnbwtlZw1jD3PmOjJpZYMuRg45ipAKHIMYOcDJFy3pCYXMSoM5rewPJK3sO409i7Czi8GBa1Sa8AZzRqLHgSP9bp9p6NytJ6uh+6e6KNYxx2oyEufHguLZ7+IOWv0L6YcrQ2t1y/I7F7MHENs6TLx5Hbz+W08rmzpbssbU4T/QyMPnfgdJAsmmEebt6K1yT5Ct+gW0Mn76bAEAAA=="
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/CDKMetadata/Default"
+   },
+   "Condition": "CDKMetadataAvailable"
+  }
+ },
+ "Outputs": {
+  "tiahuanacoApiEndpoint02A30E8E": {
+   "Value": {
+    "Fn::Join": [
+     "",
+     [
+      "https://",
+      {
+       "Ref": "tiahuanacoApi4D12496E"
+      },
+      ".execute-api.",
+      {
+       "Ref": "AWS::Region"
+      },
+      ".",
+      {
+       "Ref": "AWS::URLSuffix"
+      },
+      "/",
+      {
+       "Ref": "tiahuanacoApiDeploymentStageprod66080EAB"
+      },
+      "/"
+     ]
+    ]
+   }
+  }
+ },
+ "Conditions": {
+  "CDKMetadataAvailable": {
+   "Fn::Or": [
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "af-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-northeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ap-southeast-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "ca-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "cn-northwest-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-north-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "eu-west-3"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "il-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-central-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "me-south-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "sa-east-1"
+       ]
+      }
+     ]
+    },
+    {
+     "Fn::Or": [
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-east-2"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-1"
+       ]
+      },
+      {
+       "Fn::Equals": [
+        {
+         "Ref": "AWS::Region"
+        },
+        "us-west-2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

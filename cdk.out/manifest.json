@@ -1,0 +1,143 @@
+{
+  "version": "36.0.0",
+  "artifacts": {
+    "TiahuanacoStack.assets": {
+      "type": "cdk:asset-manifest",
+      "properties": {
+        "file": "TiahuanacoStack.assets.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+      }
+    },
+    "TiahuanacoStack": {
+      "type": "aws:cloudformation:stack",
+      "environment": "aws://unknown-account/unknown-region",
+      "properties": {
+        "templateFile": "TiahuanacoStack.template.json",
+        "terminationProtection": false,
+        "validateOnSynth": false,
+        "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
+        "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/696203fe52c6427089967e71e52b91051b53fb91f378b4b99a33a3316cb0dd8b.json",
+        "requiresBootstrapStackVersion": 6,
+        "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
+        "additionalDependencies": [
+          "TiahuanacoStack.assets"
+        ],
+        "lookupRole": {
+          "arn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-lookup-role-${AWS::AccountId}-${AWS::Region}",
+          "requiresBootstrapStackVersion": 8,
+          "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version"
+        }
+      },
+      "dependencies": [
+        "TiahuanacoStack.assets"
+      ],
+      "metadata": {
+        "/TiahuanacoStack/tiahuanacoLambda/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoLambdaServiceRole31540BFC"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoLambda/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoLambda66943F8B"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApi4D12496E"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Deployment/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApiDeploymentD25110BC7bf2e7da483c70355fa200fb65145481"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/DeploymentStage.prod/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApiDeploymentStageprod66080EAB"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Endpoint": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApiEndpoint02A30E8E"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/dice/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApidice5B1FA5C0"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/dice/GET/ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..dice": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApidiceGETApiPermissionTiahuanacoStacktiahuanacoApiA28BF0F5GETdiceDE9D1913"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/dice/GET/ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..dice": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApidiceGETApiPermissionTestTiahuanacoStacktiahuanacoApiA28BF0F5GETdiceA9500120"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/dice/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApidiceGET7DB1B14F"
+          }
+        ],
+        "/TiahuanacoStack/rollADiceFunction/ServiceRole/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rollADiceFunctionServiceRole548812C1"
+          }
+        ],
+        "/TiahuanacoStack/rollADiceFunction/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "rollADiceFunction95DE4F0F"
+          }
+        ],
+        "/TiahuanacoStack/CDKMetadata/Default": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadata"
+          }
+        ],
+        "/TiahuanacoStack/CDKMetadata/Condition": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CDKMetadataAvailable"
+          }
+        ],
+        "/TiahuanacoStack/BootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "BootstrapVersion"
+          }
+        ],
+        "/TiahuanacoStack/CheckBootstrapVersion": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "CheckBootstrapVersion"
+          }
+        ]
+      },
+      "displayName": "TiahuanacoStack"
+    },
+    "Tree": {
+      "type": "cdk:tree",
+      "properties": {
+        "file": "tree.json"
+      }
+    }
+  }
+}

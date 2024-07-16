@@ -2,30 +2,104 @@
 
 This project is a Serverless backend to manage content uploaded to AWS.  The front end is [Acapana](https://github.com/timofeysie/acapana).
 
-#
-## Table of cotents
+## Table of contents
 
 * [Workflow](#workflow)
+* [Setup](#setup)
 * [Starting out](#starting-out)
+* [The old starting out notes](#the-old-starting-out)
 * [Serverlss Node.js Starter Docs](#serverless-Node.js-Starter-docs)
-
 
 ## Workflow
 
+This is a blank project for CDK development with TypeScript.
+
+The `cdk.json` file tells the CDK Toolkit how to execute your app.
+
+* `npm run build`   compile typescript to js
+* `npm run watch`   watch for changes and compile
+* `npm run test`    perform the jest unit tests
+* `npx cdk deploy`  deploy this stack to your default AWS account/region
+* `npx cdk diff`    compare deployed stack with current state
+* `npx cdk synth`   emits the synthesized CloudFormation template
+
 Running locally:
-```
+
+```sh
 serverless invoke local --function create --path mocks/create-event.json
 ```
 
 The response should be statusCode: 200.
 
+## Setup
 
-## Starting out
+```sh
+> aws --version
+aws-cli/2.17.4 Python/3.11.8 Windows/10 exe/AMD64
+```
+
+### Module "path" can only be default-imported using the esModuleInterop
+
+Module '"path"' can only be default-imported using the 'esModuleInterop' flagts(1259)
+path.d.ts(178, 5): This module is declared with 'export =', and can only be used with a default import when using the 'esModuleInterop' flag.
+
+```json
+{
+  "compilerOptions": {
+    ...
+    "esModuleInterop": true
+  },
+```
+
+## The API Gateway
+
+The AWS API Gateway services is a classic "serverful" app and provides functionalities to create REST APIs that can invoke Lambda functions.
+
+In the tiahuanaco-stack.ts file:
+
+```ts
+const tiahuanacoApi = new cdk.aws_apigateway.RestApi(this, 'tiahuanacoApi', {});
+const diceResource = tiahuanacoApi.root.addResource('dice');
+```
+
+Create another handler.ts in lib\rollADice\handler.ts:
+
+```ts
+export const handler = async (): Promise<{
+  statusCode: number;
+  body: number;
+}> => {
+  const randomNumber = Math.floor(Math.random() * 6) + 1;
+
+  return Promise.resolve({ statusCode: 200, body: randomNumber });
+};
+```
+
+The format expected by API Gateway to be returned by a Lambda function is a return type a Promise of an object with a statusCode and a body.
+
+Then associate this to a Lambda function by adding this in the my-first-app-stack.ts file inside the constructor:
+
+```ts
+    const myFirstApi = new cdk.aws_apigateway.RestApi(this, 'myFirstApi', {});
+    const diceResource = myFirstApi.root.addResource('dice');
+    
+    const rollADiceFunction = new cdk.aws_lambda_nodejs.NodejsFunction(this, 'rollADiceFunction', {
+      entry: path.join(__dirname, 'rollADice', 'handler.ts'),
+      handler: 'handler',
+    });
+    
+    diceResource.addMethod('GET', new cdk.aws_apigateway.LambdaIntegration(rollADiceFunction));
+```
+
+Redeploy again and the GET is working fine.  Most excellent.
+
+## The old starting out notes
 
 The response to running locally should be statusCode: 200, but it's 500.
 
 Console log says:
-```
+
+```sh
 [uuid] external "uuid" 42 bytes {create} [built]
 { UnrecognizedClientException: The security token included in the request is invalid.
     at Request.extractError (/Users/tim/node/aws/notes-app-api/node_modules/aws-sdk/lib/protocol/json.js:51:27)
