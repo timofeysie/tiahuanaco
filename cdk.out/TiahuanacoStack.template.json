@@ -71,7 +71,7 @@
     "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Resource"
    }
   },
-  "tiahuanacoApiDeploymentD25110BC7bf2e7da483c70355fa200fb65145481": {
+  "tiahuanacoApiDeploymentD25110BCdfd716ca24fb58b32e66883bfc36dfd5": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -91,7 +91,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "tiahuanacoApiDeploymentD25110BC7bf2e7da483c70355fa200fb65145481"
+     "Ref": "tiahuanacoApiDeploymentD25110BCdfd716ca24fb58b32e66883bfc36dfd5"
     },
     "RestApiId": {
      "Ref": "tiahuanacoApi4D12496E"
@@ -126,7 +126,7 @@
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "rollADiceFunction95DE4F0F",
+      "rollDicesFunction63B8BCB4",
       "Arn"
      ]
     },
@@ -170,7 +170,7 @@
     "Action": "lambda:InvokeFunction",
     "FunctionName": {
      "Fn::GetAtt": [
-      "rollADiceFunction95DE4F0F",
+      "rollDicesFunction63B8BCB4",
       "Arn"
      ]
     },
@@ -227,7 +227,7 @@
         ":lambda:path/2015-03-31/functions/",
         {
          "Fn::GetAtt": [
-          "rollADiceFunction95DE4F0F",
+          "rollDicesFunction63B8BCB4",
           "Arn"
          ]
         },
@@ -305,6 +305,68 @@
    "Metadata": {
     "aws:cdk:path": "TiahuanacoStack/rollADiceFunction/Resource",
     "aws:asset:path": "asset.074d4968b562153f4d3d3938ddc3efef05ee96bff35f8de4ad11fda59c5080a0",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "rollDicesFunctionServiceRole525F1BC0": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/rollDicesFunction/ServiceRole/Resource"
+   }
+  },
+  "rollDicesFunction63B8BCB4": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "0dbc431cdc23dd63633d530b83a7731afa11306a4f6727da6a93a3e7b99fd540.zip"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "rollDicesFunctionServiceRole525F1BC0",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "rollDicesFunctionServiceRole525F1BC0"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/rollDicesFunction/Resource",
+    "aws:asset:path": "asset.0dbc431cdc23dd63633d530b83a7731afa11306a4f6727da6a93a3e7b99fd540",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

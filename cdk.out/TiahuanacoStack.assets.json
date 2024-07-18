@@ -27,7 +27,20 @@
         }
       }
     },
-    "696203fe52c6427089967e71e52b91051b53fb91f378b4b99a33a3316cb0dd8b": {
+    "0dbc431cdc23dd63633d530b83a7731afa11306a4f6727da6a93a3e7b99fd540": {
+      "source": {
+        "path": "asset.0dbc431cdc23dd63633d530b83a7731afa11306a4f6727da6a93a3e7b99fd540",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "current_account-current_region": {
+          "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
+          "objectKey": "0dbc431cdc23dd63633d530b83a7731afa11306a4f6727da6a93a3e7b99fd540.zip",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
+        }
+      }
+    },
+    "5562ccf2bd20b7a6da9e966889a1cc27b82be3d4a46739b9617df0b669131574": {
       "source": {
         "path": "TiahuanacoStack.template.json",
         "packaging": "file"
@@ -35,7 +48,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "696203fe52c6427089967e71e52b91051b53fb91f378b4b99a33a3316cb0dd8b.json",
+          "objectKey": "5562ccf2bd20b7a6da9e966889a1cc27b82be3d4a46739b9617df0b669131574.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
