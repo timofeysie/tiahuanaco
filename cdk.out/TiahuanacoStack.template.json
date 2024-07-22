@@ -71,7 +71,7 @@
     "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Resource"
    }
   },
-  "tiahuanacoApiDeploymentD25110BCcdd39900e62fda9eff4fca18e40e3f0c": {
+  "tiahuanacoApiDeploymentD25110BC5e03c9f454a2c70dfca69a51aea7bb11": {
    "Type": "AWS::ApiGateway::Deployment",
    "Properties": {
     "Description": "Automatically created by the RestApi construct",
@@ -84,6 +84,7 @@
     "tiahuanacoApidice5B1FA5C0",
     "tiahuanacoApinotesuserIdidGET5CB60AF1",
     "tiahuanacoApinotesuserIdid08C7AB8C",
+    "tiahuanacoApinotesuserIdGETEFDFBD06",
     "tiahuanacoApinotesuserIdPOSTE307BE67",
     "tiahuanacoApinotesuserIdC6453034",
     "tiahuanacoApinotes850154F3"
@@ -96,7 +97,7 @@
    "Type": "AWS::ApiGateway::Stage",
    "Properties": {
     "DeploymentId": {
-     "Ref": "tiahuanacoApiDeploymentD25110BCcdd39900e62fda9eff4fca18e40e3f0c"
+     "Ref": "tiahuanacoApiDeploymentD25110BC5e03c9f454a2c70dfca69a51aea7bb11"
     },
     "RestApiId": {
      "Ref": "tiahuanacoApi4D12496E"
@@ -410,6 +411,133 @@
    },
    "Metadata": {
     "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/notes/{userId}/POST/Resource"
+   }
+  },
+  "tiahuanacoApinotesuserIdGETApiPermissionTiahuanacoStacktiahuanacoApiA28BF0F5GETnotesuserId60232197": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getAllNotes6540FC17",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "tiahuanacoApi4D12496E"
+       },
+       "/",
+       {
+        "Ref": "tiahuanacoApiDeploymentStageprod66080EAB"
+       },
+       "/GET/notes/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/notes/{userId}/GET/ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..notes.{userId}"
+   }
+  },
+  "tiahuanacoApinotesuserIdGETApiPermissionTestTiahuanacoStacktiahuanacoApiA28BF0F5GETnotesuserId13E8B9FC": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "getAllNotes6540FC17",
+      "Arn"
+     ]
+    },
+    "Principal": "apigateway.amazonaws.com",
+    "SourceArn": {
+     "Fn::Join": [
+      "",
+      [
+       "arn:",
+       {
+        "Ref": "AWS::Partition"
+       },
+       ":execute-api:",
+       {
+        "Ref": "AWS::Region"
+       },
+       ":",
+       {
+        "Ref": "AWS::AccountId"
+       },
+       ":",
+       {
+        "Ref": "tiahuanacoApi4D12496E"
+       },
+       "/test-invoke-stage/GET/notes/*"
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/notes/{userId}/GET/ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..notes.{userId}"
+   }
+  },
+  "tiahuanacoApinotesuserIdGETEFDFBD06": {
+   "Type": "AWS::ApiGateway::Method",
+   "Properties": {
+    "AuthorizationType": "NONE",
+    "HttpMethod": "GET",
+    "Integration": {
+     "IntegrationHttpMethod": "POST",
+     "Type": "AWS_PROXY",
+     "Uri": {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":apigateway:",
+        {
+         "Ref": "AWS::Region"
+        },
+        ":lambda:path/2015-03-31/functions/",
+        {
+         "Fn::GetAtt": [
+          "getAllNotes6540FC17",
+          "Arn"
+         ]
+        },
+        "/invocations"
+       ]
+      ]
+     }
+    },
+    "ResourceId": {
+     "Ref": "tiahuanacoApinotesuserIdC6453034"
+    },
+    "RestApiId": {
+     "Ref": "tiahuanacoApi4D12496E"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/tiahuanacoApi/Default/notes/{userId}/GET/Resource"
    }
   },
   "tiahuanacoApinotesuserIdid08C7AB8C": {
@@ -928,6 +1056,119 @@
    "Metadata": {
     "aws:cdk:path": "TiahuanacoStack/getNote/Resource",
     "aws:asset:path": "asset.2309dd88918f4e3c833ae7ea029e0d270d946cbbc465349fa7d08f6fd5a8c037",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "getAllNotesServiceRole77AEA8E9": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/getAllNotes/ServiceRole/Resource"
+   }
+  },
+  "getAllNotesServiceRoleDefaultPolicy3A3DA9CE": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "dynamodb:BatchGetItem",
+        "dynamodb:ConditionCheckItem",
+        "dynamodb:DescribeTable",
+        "dynamodb:GetItem",
+        "dynamodb:GetRecords",
+        "dynamodb:GetShardIterator",
+        "dynamodb:Query",
+        "dynamodb:Scan"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "notesTableAC5177F3",
+          "Arn"
+         ]
+        },
+        {
+         "Ref": "AWS::NoValue"
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "getAllNotesServiceRoleDefaultPolicy3A3DA9CE",
+    "Roles": [
+     {
+      "Ref": "getAllNotesServiceRole77AEA8E9"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/getAllNotes/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "getAllNotes6540FC17": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": {
+      "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
+     },
+     "S3Key": "9b6b355372c19fd24d10b86208be67510297068097ac905b20ddcf28289635c8.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "TABLE_NAME": {
+       "Ref": "notesTableAC5177F3"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "getAllNotesServiceRole77AEA8E9",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs18.x"
+   },
+   "DependsOn": [
+    "getAllNotesServiceRoleDefaultPolicy3A3DA9CE",
+    "getAllNotesServiceRole77AEA8E9"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "TiahuanacoStack/getAllNotes/Resource",
+    "aws:asset:path": "asset.9b6b355372c19fd24d10b86208be67510297068097ac905b20ddcf28289635c8",
     "aws:asset:is-bundled": true,
     "aws:asset:property": "Code"
    }

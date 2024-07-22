@@ -105,25 +105,44 @@ export class TiahuanacoStack extends cdk.Stack {
       },
     });
 
+    const getAllNotes = new cdk.aws_lambda_nodejs.NodejsFunction(
+      this,
+      "getAllNotes",
+      {
+        entry: path.join(__dirname, "getAllNotes", "handler.ts"),
+        handler: "handler",
+        environment: {
+          TABLE_NAME: notesTable.tableName,
+        },
+      }
+    );
+
     notesTable.grantWriteData(createNote);
     notesTable.grantReadData(getNote);
+    notesTable.grantReadData(getAllNotes);
 
     /**
      * POST /prod/notes/<user_id>
      * User ID can be anything at this point.
-     * 
+     *
      * GET /prod/notes/123/2875b0ac-5ee2-4f35-a6dd-406687d5641e
      * returns the created note
      */
-    const notesResource = tiahuanacoApi.root
-      .addResource("notes")
-      .addResource("{userId}");
-    notesResource.addMethod(
+    const notesResource = tiahuanacoApi.root.addResource("notes");
+    const userResource = notesResource.addResource("{userId}");
+    userResource.addMethod(
       "POST",
       new cdk.aws_apigateway.LambdaIntegration(createNote)
     );
-    notesResource
-      .addResource("{id}")
-      .addMethod("GET", new cdk.aws_apigateway.LambdaIntegration(getNote));
+    userResource.addMethod(
+      "GET",
+      new cdk.aws_apigateway.LambdaIntegration(getAllNotes)
+    );
+
+    const noteResource = userResource.addResource("{id}");
+    noteResource.addMethod(
+      "GET",
+      new cdk.aws_apigateway.LambdaIntegration(getNote)
+    );
   }
 }
