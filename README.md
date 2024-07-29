@@ -1,6 +1,6 @@
 # Tiahuanaco
 
-This project is a Serverless backend to manage content uploaded to AWS.  The front end is [Acapana](https://github.com/timofeysie/acapana).
+A TypeScript Serverless backend API using DynamoDB.
 
 ## Table of contents
 

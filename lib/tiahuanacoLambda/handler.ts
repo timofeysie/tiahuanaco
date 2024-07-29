@@ -1,1 +1,5 @@
-export const handler = (): Promise<string> => Promise.resolve('TiahuanacoStack is at v0.0.1');
+export const handler = async (): Promise<string> => {
+    const version = process.env.VERSION;
+    return `TiahuanacoStack v${version}`;
+  };
+  

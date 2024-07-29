@@ -1,7 +1,26 @@
 
 # Access errors: AccessDeniedException & Missing Authentication Token
 
-This error can have a message such as: "URL x is not authorized to perform: dynamodb:Query on resource y because no identity-based policy allows the dynamodb:Query action".
+Currently I have two endpoints that work:
+
+```txt
+POST /prod/notes/123/
+GET /prod/notes/123/2875b0ac-5ee2-4f35-a6dd-406687d5641e
+```
+
+And three that don't work from a browser, but work in the AWS Lambda console:
+
+```txt
+GET /prod/tiahuanaco
+GET /prod/dice/3
+GET /prod/notes/123/
+```
+
+The first two both return ```"message": "Missing Authentication Token"``` when run in the browser but run fine in the AWS console tests.
+
+I am trying to add a get all notes endpoint (GET /prod/notes/123/) for the homework section on the [Getting started with AWS serverless - Databases](https://dev.to/slsbytheodo/learn-serverless-on-aws-step-by-step-databases-kkg) article.
+
+This error I am seeing goes like this: "URL x is not authorized to perform: dynamodb:Query on resource y because no identity-based policy allows the dynamodb:Query action".
 
 It seems like this is the right thing to grant access:
 

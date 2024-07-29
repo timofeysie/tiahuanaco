@@ -1,15 +1,15 @@
 {
   "version": "36.0.0",
   "files": {
-    "f06bd216d3d77490ef9d8e9dd10b04668216d7905262dcf6c353732293b1d1c3": {
+    "752a2b4da070cf1dac9a3893e241f6f0a0d58b432e5da86239b61a513345bf28": {
       "source": {
-        "path": "asset.f06bd216d3d77490ef9d8e9dd10b04668216d7905262dcf6c353732293b1d1c3",
+        "path": "asset.752a2b4da070cf1dac9a3893e241f6f0a0d58b432e5da86239b61a513345bf28",
         "packaging": "zip"
       },
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "f06bd216d3d77490ef9d8e9dd10b04668216d7905262dcf6c353732293b1d1c3.zip",
+          "objectKey": "752a2b4da070cf1dac9a3893e241f6f0a0d58b432e5da86239b61a513345bf28.zip",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }
@@ -79,7 +79,7 @@
         }
       }
     },
-    "2e0b16f5d57649690b13d45516e52369af04c8375095d90f35fd5a885270a5f2": {
+    "6a2ec8db36a28bde4f0dc2c5621795f7bd32d55c43c7c09fa11a40319b4d0a66": {
       "source": {
         "path": "TiahuanacoStack.template.json",
         "packaging": "file"
@@ -87,7 +87,7 @@
       "destinations": {
         "current_account-current_region": {
           "bucketName": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}",
-          "objectKey": "2e0b16f5d57649690b13d45516e52369af04c8375095d90f35fd5a885270a5f2.json",
+          "objectKey": "6a2ec8db36a28bde4f0dc2c5621795f7bd32d55c43c7c09fa11a40319b4d0a66.json",
           "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-${AWS::AccountId}-${AWS::Region}"
         }
       }

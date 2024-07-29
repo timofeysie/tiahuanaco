@@ -18,7 +18,7 @@
         "validateOnSynth": false,
         "assumeRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-deploy-role-${AWS::AccountId}-${AWS::Region}",
         "cloudFormationExecutionRoleArn": "arn:${AWS::Partition}:iam::${AWS::AccountId}:role/cdk-hnb659fds-cfn-exec-role-${AWS::AccountId}-${AWS::Region}",
-        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/2e0b16f5d57649690b13d45516e52369af04c8375095d90f35fd5a885270a5f2.json",
+        "stackTemplateAssetObjectUrl": "s3://cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}/6a2ec8db36a28bde4f0dc2c5621795f7bd32d55c43c7c09fa11a40319b4d0a66.json",
         "requiresBootstrapStackVersion": 6,
         "bootstrapStackVersionSsmParameter": "/cdk-bootstrap/hnb659fds/version",
         "additionalDependencies": [
@@ -55,7 +55,7 @@
         "/TiahuanacoStack/tiahuanacoApi/Deployment/Resource": [
           {
             "type": "aws:cdk:logicalId",
-            "data": "tiahuanacoApiDeploymentD25110BC5e03c9f454a2c70dfca69a51aea7bb11"
+            "data": "tiahuanacoApiDeploymentD25110BCe71903f478dc2a3b619e59da83aeffc7"
           }
         ],
         "/TiahuanacoStack/tiahuanacoApi/DeploymentStage.prod/Resource": [
@@ -68,6 +68,30 @@
           {
             "type": "aws:cdk:logicalId",
             "data": "tiahuanacoApiEndpoint02A30E8E"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApitiahuanaco94140895"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApitiahuanacoGETApiPermissionTiahuanacoStacktiahuanacoApiA28BF0F5GETtiahuanacoD927A7E0"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApitiahuanacoGETApiPermissionTestTiahuanacoStacktiahuanacoApiA28BF0F5GETtiahuanaco4F895075"
+          }
+        ],
+        "/TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/Resource": [
+          {
+            "type": "aws:cdk:logicalId",
+            "data": "tiahuanacoApitiahuanacoGET1F2E0441"
           }
         ],
         "/TiahuanacoStack/tiahuanacoApi/Default/dice/Resource": [

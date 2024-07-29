@@ -3,6 +3,8 @@ import { Construct } from "constructs";
 import path from "path";
 import { join } from "path";
 
+const version = "0.0.2";
+
 export class TiahuanacoStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -12,11 +14,12 @@ export class TiahuanacoStack extends cdk.Stack {
      * taking care of packaging (ie: we won't have to worry about importing dependencies etc...).
      * This is just the oil stick to report that the app is live.
      */
-    new cdk.aws_lambda_nodejs.NodejsFunction(this, "tiahuanacoLambda", {
-      // define the code that will be executed on the cloud
+    const tiahuanacoLambda = new cdk.aws_lambda_nodejs.NodejsFunction(this, "tiahuanacoLambda", {
       entry: path.join(__dirname, "tiahuanacoLambda", "handler.ts"),
-      // the function that will be executed when the Lambda is invoked
       handler: "handler",
+      environment: {
+        VERSION: version,
+      },
     });
 
     const tiahuanacoApi = new cdk.aws_apigateway.RestApi(
@@ -24,6 +27,13 @@ export class TiahuanacoStack extends cdk.Stack {
       "tiahuanacoApi",
       {}
     );
+
+    const tiahuanacoResource = tiahuanacoApi.root.addResource("tiahuanaco");
+    tiahuanacoResource.addMethod(
+      "GET",
+      new cdk.aws_apigateway.LambdaIntegration(tiahuanacoLambda)
+    );
+
     const diceResource = tiahuanacoApi.root.addResource("dice");
 
     /**
@@ -53,11 +63,6 @@ export class TiahuanacoStack extends cdk.Stack {
           externalModules: ["@aws-sdk"],
         },
       }
-    );
-
-    diceResource.addMethod(
-      "GET",
-      new cdk.aws_apigateway.LambdaIntegration(rollManyDicesFunction)
     );
 
     const notesTable = new cdk.aws_dynamodb.Table(this, "notesTable", {
@@ -119,7 +124,16 @@ export class TiahuanacoStack extends cdk.Stack {
 
     notesTable.grantWriteData(createNote);
     notesTable.grantReadData(getNote);
-    notesTable.grantReadData(getAllNotes);
+    notesTable.grantReadWriteData(getAllNotes);
+
+    /**
+     * GET /prod/tiahuanaco
+     * This should return the app version number and show its working.
+     */
+    diceResource.addMethod(
+      "GET",
+      new cdk.aws_apigateway.LambdaIntegration(rollManyDicesFunction)
+    );
 
     /**
      * POST /prod/notes/<user_id>

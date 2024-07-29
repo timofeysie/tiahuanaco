@@ -105,7 +105,12 @@
                       "s3Bucket": {
                         "Fn::Sub": "cdk-hnb659fds-assets-${AWS::AccountId}-${AWS::Region}"
                       },
-                      "s3Key": "f06bd216d3d77490ef9d8e9dd10b04668216d7905262dcf6c353732293b1d1c3.zip"
+                      "s3Key": "752a2b4da070cf1dac9a3893e241f6f0a0d58b432e5da86239b61a513345bf28.zip"
+                    },
+                    "environment": {
+                      "variables": {
+                        "VERSION": "0.0.2"
+                      }
                     },
                     "handler": "index.handler",
                     "role": {
@@ -184,7 +189,7 @@
                       "aws:cdk:cloudformation:type": "AWS::ApiGateway::Stage",
                       "aws:cdk:cloudformation:props": {
                         "deploymentId": {
-                          "Ref": "tiahuanacoApiDeploymentD25110BC5e03c9f454a2c70dfca69a51aea7bb11"
+                          "Ref": "tiahuanacoApiDeploymentD25110BCe71903f478dc2a3b619e59da83aeffc7"
                         },
                         "restApiId": {
                           "Ref": "tiahuanacoApi4D12496E"
@@ -215,6 +220,191 @@
                 "id": "Default",
                 "path": "TiahuanacoStack/tiahuanacoApi/Default",
                 "children": {
+                  "tiahuanaco": {
+                    "id": "tiahuanaco",
+                    "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco",
+                    "children": {
+                      "Resource": {
+                        "id": "Resource",
+                        "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/Resource",
+                        "attributes": {
+                          "aws:cdk:cloudformation:type": "AWS::ApiGateway::Resource",
+                          "aws:cdk:cloudformation:props": {
+                            "parentId": {
+                              "Fn::GetAtt": [
+                                "tiahuanacoApi4D12496E",
+                                "RootResourceId"
+                              ]
+                            },
+                            "pathPart": "tiahuanaco",
+                            "restApiId": {
+                              "Ref": "tiahuanacoApi4D12496E"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.CfnResource",
+                          "version": "2.149.0"
+                        }
+                      },
+                      "GET": {
+                        "id": "GET",
+                        "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET",
+                        "children": {
+                          "ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco": {
+                            "id": "ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco",
+                            "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/ApiPermission.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "tiahuanacoLambda66943F8B",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "tiahuanacoApi4D12496E"
+                                      },
+                                      "/",
+                                      {
+                                        "Ref": "tiahuanacoApiDeploymentStageprod66080EAB"
+                                      },
+                                      "/GET/tiahuanaco"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.149.0"
+                            }
+                          },
+                          "ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco": {
+                            "id": "ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco",
+                            "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/ApiPermission.Test.TiahuanacoStacktiahuanacoApiA28BF0F5.GET..tiahuanaco",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::Lambda::Permission",
+                              "aws:cdk:cloudformation:props": {
+                                "action": "lambda:InvokeFunction",
+                                "functionName": {
+                                  "Fn::GetAtt": [
+                                    "tiahuanacoLambda66943F8B",
+                                    "Arn"
+                                  ]
+                                },
+                                "principal": "apigateway.amazonaws.com",
+                                "sourceArn": {
+                                  "Fn::Join": [
+                                    "",
+                                    [
+                                      "arn:",
+                                      {
+                                        "Ref": "AWS::Partition"
+                                      },
+                                      ":execute-api:",
+                                      {
+                                        "Ref": "AWS::Region"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "AWS::AccountId"
+                                      },
+                                      ":",
+                                      {
+                                        "Ref": "tiahuanacoApi4D12496E"
+                                      },
+                                      "/test-invoke-stage/GET/tiahuanaco"
+                                    ]
+                                  ]
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_lambda.CfnPermission",
+                              "version": "2.149.0"
+                            }
+                          },
+                          "Resource": {
+                            "id": "Resource",
+                            "path": "TiahuanacoStack/tiahuanacoApi/Default/tiahuanaco/GET/Resource",
+                            "attributes": {
+                              "aws:cdk:cloudformation:type": "AWS::ApiGateway::Method",
+                              "aws:cdk:cloudformation:props": {
+                                "authorizationType": "NONE",
+                                "httpMethod": "GET",
+                                "integration": {
+                                  "type": "AWS_PROXY",
+                                  "uri": {
+                                    "Fn::Join": [
+                                      "",
+                                      [
+                                        "arn:",
+                                        {
+                                          "Ref": "AWS::Partition"
+                                        },
+                                        ":apigateway:",
+                                        {
+                                          "Ref": "AWS::Region"
+                                        },
+                                        ":lambda:path/2015-03-31/functions/",
+                                        {
+                                          "Fn::GetAtt": [
+                                            "tiahuanacoLambda66943F8B",
+                                            "Arn"
+                                          ]
+                                        },
+                                        "/invocations"
+                                      ]
+                                    ]
+                                  },
+                                  "integrationHttpMethod": "POST"
+                                },
+                                "resourceId": {
+                                  "Ref": "tiahuanacoApitiahuanaco94140895"
+                                },
+                                "restApiId": {
+                                  "Ref": "tiahuanacoApi4D12496E"
+                                }
+                              }
+                            },
+                            "constructInfo": {
+                              "fqn": "aws-cdk-lib.aws_apigateway.CfnMethod",
+                              "version": "2.149.0"
+                            }
+                          }
+                        },
+                        "constructInfo": {
+                          "fqn": "aws-cdk-lib.aws_apigateway.Method",
+                          "version": "2.149.0"
+                        }
+                      }
+                    },
+                    "constructInfo": {
+                      "fqn": "aws-cdk-lib.aws_apigateway.Resource",
+                      "version": "2.149.0"
+                    }
+                  },
                   "dice": {
                     "id": "dice",
                     "path": "TiahuanacoStack/tiahuanacoApi/Default/dice",

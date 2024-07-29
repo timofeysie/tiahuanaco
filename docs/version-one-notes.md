@@ -1,5 +1,7 @@
 # The old README
 
+This project is a Serverless backend to manage content uploaded to AWS.  The front end is [Acapana](https://github.com/timofeysie/acapana).
+
 ## starting out notes
 
 The response to running locally should be statusCode: 200, but it's 500.
